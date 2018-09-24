@@ -15,8 +15,6 @@ ps的选项部分比较复杂，接受三种风格的选项，如下
 2. BSD风格，  选项绝对不能以“-”开头，多个BSD风格的选项亦可以组合
 3. GNU长选项风格， 选项以“--”开头，多个此风格的选项不可组合，只能一个个单独写
 
-内心os：逗我么？这么多风格会死人的好吧，使用的时候还是不要混用了，专注于其中一个就好了。
-
 狗血的是，这三种风格的选项还可以自由混合使用，用是可以用，但是有可能发生冲突。三种风格中的选项有些是功能相同的，这是因为ps的标准和实现种类太多了。
 
 注意到， ps -aux 不同于 ps aux，POSIX（portable operating system interface，可移植操作系统接口）和Unix标准要求 ps -aux打印出所有属于名为x的用户的进程， 同时也要求打印出-a选项所指定的所有进程， 若名为x的用户不存在，出于兼容性，ps会将ps -aux理解为ps aux，这种自作主张的“转义”理解是靠不住的，不应该指望这种操作会给出你想要的结果。
@@ -38,11 +36,26 @@ ps的选项部分比较复杂，接受三种风格的选项，如下
 TTY显示为？的进程为守护进程，所谓的daemon，一般在系统启动的时候就开始运行了。
 
 > TTY
-
+>>TTY 就是执行命令的那个terminal。
+terminal一般指终端，有真终端和伪终端之分，真终端就比如在Ubuntu上用Ctrl+Alt+F1这种进入的只能看见黑白字符的没有图形化的那种界面，伪终端就是你的图形化界面的时候召唤出那种类似于Ubuntu上的Gnome Terminal的东西，Ubuntu下的伪终端命名类似于`pts/*`，Mac下面的伪终端命名就类似于`ttys*`。
 
 > Control terminal
+>>你在terminal里面执行了某个命令，那么这个terminal就是那个命令的Control terminal，control terminal的意义在于你可以通过控制control terminal来控制它启动的程序，比如来个Ctrl+C之类的操作，或者可以通过标准输入和输出和程序进行互动等。
 
-默认情况下， ps会挑选出与当前用户拥有相同的EUID（有效用户ID）以及相同终端的所有进程。ps的显示内容包括，进程ID-PID，进程相关terminal-TTY，累计CPU时间-TIME，执行命令名称-CMD，这些输出条目是无序的。
+>各种ID：UID-EUID-SUID-GID
+这些ID都是为了权限管理，另外需要知道的是这些ID是可以变的
+UID：用户ID，每个用户都有个ID，root用户的id为0
+RUID：真实用户ID，谁登录到了shell，那么RUID就是谁，几乎永不会变
+EUID：有效用户ID，用于判定用户对文件和资源的访问权限，EUID只能变为SUID或者RUID
+SUID：Saved Set-User-Id，保存设置用户ID
+SGID：Saved Set-Group-Id，保存设置用户组ID
+
+进程在执行过程中EUID是可能变的，因为进程可能需要访问某些自己没有权限访问的文件资源。注意上面说的ID都只是ID，不涉及文件权限，涉及文件权限的是rwx，以及set-user-id-bit, set-group-id-bit, sticky-bit。
+
+>权限
+一般书上都讲，权限就是rwx（至于什么421的就不说了），然后分三类，也就是文件所有者，所属组，其他人的读写执行权限，可以用9个二进制位来表示，然而，真相就是文件权限是12位，分别为SGT RWX RWX RWX，后面的RWX三连就是日常说的所有者，所属组，其他人权限。前面的SGT就是set-user-id-bit，set-group-id-bit，sticky-bit，sticky-bit用于控制文件的删除特性，有sticky-bit的文件只能由其所属者删除，set-user-id-bit 和 set-group-id-bit则一般设置在可执行文件身上，设置了这俩的可执行文件，在被非所属主的其他用户执行的时候，该其它用户的EUID和EGID会变为该可执行文件所属主的id和gid。《Unix环境高级编程》
+
+默认情况下， ps会挑选出与当前用户拥有相同的EUID（有效用户ID）以及相同终端的所有进程。ps的显示内容包括，进程ID-PID，进程相关terminal-TTY，累计CPU时间-TIME，执行命令名称-CMD，这些输出条目之间是无序的。
 
 BSD风格的选项会在ps的默认输出以外加上进程状态-STAT，并且会将默认的命令执行名称换为命令及其参数-COMMAND，这些都是可控的，受你的PS_FORMAT环境变量的影响，BSD风格的选项会将你拥有的其它terminal的进程也包含进来，这相当于无形中的添加了一种选择进程的规则：排除了其它用户的进程以及不在终端中的进程。但是，上面所述的那些附加影响会在某种情况下不被考虑，比如选项描述意义相同的时候，那时候-M将会被认为和Z选项相同。
 
@@ -51,82 +64,74 @@ BSD风格的选项会在ps的默认输出以外加上进程状态-STAT，并且�
 # 例子
 标准语法：选择系统中的所有进程
 
-ps -e
-
-ps -ef
-
-ps -eF
-
-ps -ely
+* ps -e
+ 
+* ps -ef
+ 
+* ps -eF
+ 
+* ps -ely
 
 BSD语法：选择系统中所有进程
 
-ps ax
-
-ps axu
+* ps ax
+ 
+* ps axu
 
 打印进程树
 
-ps -ejH
-
-ps axjf
+* ps -ejH
+ 
+* ps axjf
 
 获取进程信息
 
-ps -eLf
-
-ps axms
+* ps -eLf
+ 
+* ps axms
 
 获取安全信息
 
-ps -eo euser,ruser,suser,fuser,f,comm,label
-
-ps axZ
-
-ps -eM
+* ps -eo euser,ruser,suser,fuser,f,comm,label
+ 
+* ps axZ
+ 
+* ps -eM
 
 获取以root身份运行的所有进程
 
-ps -U root -u root u
+* ps -U root -u root u
 
 以用户定义的格式显示进程（注意逗号后面不能加空格）
 
-ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm
-
-ps axo stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm
-
-ps -Ao pid,tt,user,fname,tmout,f,wchan
+* ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm
+ 
+* ps axo stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm
+ 
+* ps -Ao pid,tt,user,fname,tmout,f,wchan
 
 打印syslogd的进程ID
 
-ps -C syslogd -o pid=
+* ps -C syslogd -o pid=
 
 打印PID为42的进程名称
 
-ps -q 42 -o comm=
+* ps -q 42 -o comm=
 
 ## 简单进程选择规则（选项）
 
 a 解除了BSD风格ps选项的仅挑选和当前用户有关的进程的限制，适用于BSD风格的选项以及ps被限制为BSD风格的时候，说白了就是你的选项里面没有出现“-”符号，也就是你当前使用的是BSD风格的ps。a选项的作用就是选择除了其他指定选项已选择的进程之外的选择，换句话说，就是选择所有和终端有关的进程，或者在和x选项搭配的时候选择出所有的进程。
 
--A 选择所有的进程， 作用类同-e选项
--a 选择所有进程，但排除会话领导者(session leader，第一个开启会话的进程，通常为一个shell)以及终端无关的进程
-
--d 选择所有进程，但是排除会话领导者(session leader)
-
--- deselect 选择除了那些实现某些特定条件的之外的进程（反选进程）， 作用类同与-N
-
--e 同-A，选择所有进程
-
-g 选择所有进程，即使是session leader。此选项已过时且可能在未来的ps中不被支持，并且此选项仅在sunos4特性下才可用（基本可以放弃这个选项）
-
--N 反选进程。作用同前面的--deselect
-
-T 选择与终端有关的所有进程，作用同不带参数的t选项
-
-r 只选择在运行中的进程
-
-x 解除BSD风格ps中的进程必须有对应的tty的限制（ps必须为BSD风格）
+* -A 选择所有的进程， 作用类同-e选项
+* -a 选择所有进程，但排除会话领导者(session leader，第一个开启会话的进程，通常为一个shell)以及终端无关的进程
+* -d 选择所有进程，但是排除会话领导者(session leader)
+* -- deselect 选择除了那些实现某些特定条件的之外的进程（反选进程）， 作用类同与-N
+* -e 同-A，选择所有进程
+* g 选择所有进程，即使是session leader。此选项已过时且可能在未来的ps中不被支持，并且此选项仅在sunos4特性下才可用（基本可以放弃这个选项）
+* -N 反选进程。作用同前面的--deselect
+* T 选择与终端有关的所有进程，作用同不带参数的t选项
+* r 只选择在运行中的进程
+* x 解除BSD风格ps中的进程必须有对应的tty的限制（ps必须为BSD风格）
 
 ## 列表式规则选择进程
 
@@ -136,8 +141,6 @@ x 解除BSD风格ps中的进程必须有对应的tty的限制（ps必须为BSD�
 
 123  等同于 --pid 123
 
--C cmdlist，选择进程名参数列表指定的进程，进程名为executable name
-
--G grplist，grplist为真实组ID列表或者组名称列表
-
--g grplist，grplist为会话或者有效组名。
+* -C cmdlist，选择进程名参数列表指定的进程，进程名为executable name
+* -G grplist，grplist为真实组ID列表或者组名称列表
+* -g grplist，grplist为会话或者有效组名。
