@@ -52,123 +52,92 @@ BSD风格的选项会在ps的默认输出以外加上进程状态-STAT，并且�
 标准语法：选择系统中的所有进程
 
 ps -e
----
+
 ps -ef
----
+
 ps -eF
----
+
 ps -ely
----
 
 BSD语法：选择系统中所有进程
 
----
 ps ax
----
+
 ps axu
----
 
 打印进程树
 
----
 ps -ejH
----
+
 ps axjf
----
 
 获取进程信息
 
----
 ps -eLf
----
+
 ps axms
----
 
 获取安全信息
 
----
 ps -eo euser,ruser,suser,fuser,f,comm,label
----
+
 ps axZ
----
+
 ps -eM
----
 
 获取以root身份运行的所有进程
 
----
 ps -U root -u root u
----
 
 以用户定义的格式显示进程（注意逗号后面不能加空格）
 
----
 ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm
----
+
 ps axo stat,euid,ruid,tty,tpgid,sess,pgrp,ppid,pid,pcpu,comm
----
+
 ps -Ao pid,tt,user,fname,tmout,f,wchan
----
 
 打印syslogd的进程ID
 
----
 ps -C syslogd -o pid=
----
 
 打印PID为42的进程名称
 
----
 ps -q 42 -o comm=
----
 
 ## 简单进程选择规则（选项）
 
 a 解除了BSD风格ps选项的仅挑选和当前用户有关的进程的限制，适用于BSD风格的选项以及ps被限制为BSD风格的时候，说白了就是你的选项里面没有出现“-”符号，也就是你当前使用的是BSD风格的ps。a选项的作用就是选择除了其他指定选项已选择的进程之外的选择，换句话说，就是选择所有和终端有关的进程，或者在和x选项搭配的时候选择出所有的进程。
 
----
 -A 选择所有的进程， 作用类同-e选项
----
 -a 选择所有进程，但排除会话领导者(session leader，第一个开启会话的进程，通常为一个shell)以及终端无关的进程
----
 
 -d 选择所有进程，但是排除会话领导者(session leader)
----
 
 -- deselect 选择除了那些实现某些特定条件的之外的进程（反选进程）， 作用类同与-N
----
 
 -e 同-A，选择所有进程
----
 
 g 选择所有进程，即使是session leader。此选项已过时且可能在未来的ps中不被支持，并且此选项仅在sunos4特性下才可用（基本可以放弃这个选项）
----
 
 -N 反选进程。作用同前面的--deselect
----
 
 T 选择与终端有关的所有进程，作用同不带参数的t选项
----
 
 r 只选择在运行中的进程
----
 
 x 解除BSD风格ps中的进程必须有对应的tty的限制（ps必须为BSD风格）
----
 
 ## 列表式规则选择进程
 
 以下的选项（也就是说不是所有的选项都支持）支持一些列表式的参数，参数以空格分隔或者以逗号分隔，并且选项和参数可以使用多次，比如 ps -p "1 2" -p 3,4
 
 -123 等同于 --pid 123
+
 123  等同于 --pid 123
 
----
 -C cmdlist，选择进程名参数列表指定的进程，进程名为executable name
 
----
 -G grplist，grplist为真实组ID列表或者组名称列表
 
----
 -g grplist，grplist为会话或者有效组名。
----
