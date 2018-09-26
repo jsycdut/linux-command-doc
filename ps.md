@@ -44,11 +44,17 @@ terminal一般指终端，有真终端和伪终端之分，真终端就比如在
 
 >各种ID：UID-EUID-SUID-GID
 >>这些ID都是为了权限管理，另外需要知道的是这些ID是可以变的
+
 >>UID：用户ID，每个用户都有个ID，root用户的id为0
+
 >>RUID：真实用户ID，谁登录到了shell，那么RUID就是谁，几乎永不会变
+
 >>EUID：有效用户ID，用于判定用户对文件和资源的访问权限，EUID只能变为SUID或者RUID
+
 >>SUID：Saved Set-User-Id，保存设置用户ID
+
 >>SGID：Saved Set-Group-Id，保存设置用户组ID
+
 
 进程在执行过程中EUID是可能变的，因为进程可能需要访问某些自己没有权限访问的文件资源。注意上面说的ID都只是ID，不涉及文件权限，涉及文件权限的是rwx，以及set-user-id-bit, set-group-id-bit, sticky-bit。
 
