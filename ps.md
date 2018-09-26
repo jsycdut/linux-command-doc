@@ -30,7 +30,7 @@ ps的选项部分比较复杂，接受三种风格的选项，如下
 |CMD|产生此进程的命令名称（不含参数）|
 |STAT|进程状态（运行中、等待执行等）|
 |START|进程开始执行到现在经历过的时间|
-|%MEM|进程所用的内存（内存百分比，不是MB这种单位，而是代表2%这种类型）|
+|%MEM|进程所用的内存（不是MB这种单位，而是20%这种百分比）|
 |%CPU|进程所用的CPU|
  
 TTY显示为？的进程为守护进程，所谓的daemon，一般在系统启动的时候就开始运行了。
@@ -43,17 +43,17 @@ terminal一般指终端，有真终端和伪终端之分，真终端就比如在
 >>你在terminal里面执行了某个命令，那么这个terminal就是那个命令的Control terminal，control terminal的意义在于你可以通过控制control terminal来控制它启动的程序，比如来个Ctrl+C之类的操作，或者可以通过标准输入和输出和程序进行互动等。
 
 >各种ID：UID-EUID-SUID-GID
-这些ID都是为了权限管理，另外需要知道的是这些ID是可以变的
-UID：用户ID，每个用户都有个ID，root用户的id为0
-RUID：真实用户ID，谁登录到了shell，那么RUID就是谁，几乎永不会变
-EUID：有效用户ID，用于判定用户对文件和资源的访问权限，EUID只能变为SUID或者RUID
-SUID：Saved Set-User-Id，保存设置用户ID
-SGID：Saved Set-Group-Id，保存设置用户组ID
+>>这些ID都是为了权限管理，另外需要知道的是这些ID是可以变的
+>>UID：用户ID，每个用户都有个ID，root用户的id为0
+>>RUID：真实用户ID，谁登录到了shell，那么RUID就是谁，几乎永不会变
+>>EUID：有效用户ID，用于判定用户对文件和资源的访问权限，EUID只能变为SUID或者RUID
+>>SUID：Saved Set-User-Id，保存设置用户ID
+>>SGID：Saved Set-Group-Id，保存设置用户组ID
 
 进程在执行过程中EUID是可能变的，因为进程可能需要访问某些自己没有权限访问的文件资源。注意上面说的ID都只是ID，不涉及文件权限，涉及文件权限的是rwx，以及set-user-id-bit, set-group-id-bit, sticky-bit。
 
 >权限
-一般书上都讲，权限就是rwx（至于什么421的就不说了），然后分三类，也就是文件所有者，所属组，其他人的读写执行权限，可以用9个二进制位来表示，然而，真相就是文件权限是12位，分别为SGT RWX RWX RWX，后面的RWX三连就是日常说的所有者，所属组，其他人权限。前面的SGT就是set-user-id-bit，set-group-id-bit，sticky-bit，sticky-bit用于控制文件的删除特性，有sticky-bit的文件只能由其所属者删除，set-user-id-bit 和 set-group-id-bit则一般设置在可执行文件身上，设置了这俩的可执行文件，在被非所属主的其他用户执行的时候，该其它用户的EUID和EGID会变为该可执行文件所属主的id和gid。《Unix环境高级编程》
+一般书上都讲，权限就是rwx（至于什么421的就不说了），然后分三类，也就是文件所有者，所属组，其他人的读写执行权限，可以用9个二进制位来表示，然而，真相就是文件权限是12位，分别为SGT RWX RWX RWX，后面的RWX三连就是日常说的所有者，所属组，其他人权限。前面的SGT就是set-user-id-bit，set-group-id-bit，sticky-bit，sticky-bit用于控制文件的删除特性，有sticky-bit的文件只能由其所属者删除，set-user-id-bit 和 set-group-id-bit则一般设置在可执行文件身上，设置了这俩的可执行文件，在被非所属主的其他用户执行的时候，该其它用户的EUID和EGID会变为该可执行文件所属主的id和gid。一般来说，ls -l 显示出来的结果在权限上就9位，是没有12位的，但是又必须得显示，Linux用的办法就是借用x的位置，也就是在可执行权限的那一位做手脚，设置了set-user-bit，若该文件的所属主x位上为x，那么x会被替换为s，若x位上为空，那么该位上将会被赋值为S，set-group-id-bit类同，不过是在文件的所属组的x位上做手脚而，sticky-bit的话，借用的文件的其他人的x位，不过用的不是s，而是t，大小写的规则同前面二者。《Unix环境高级编程》
 
 默认情况下， ps会挑选出与当前用户拥有相同的EUID（有效用户ID）以及相同终端的所有进程。ps的显示内容包括，进程ID-PID，进程相关terminal-TTY，累计CPU时间-TIME，执行命令名称-CMD，这些输出条目之间是无序的。
 
