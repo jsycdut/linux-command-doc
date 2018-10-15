@@ -314,6 +314,7 @@ ps U jsy     # 选出EUID为jsy的进程
 ---
 * 小结
 可以通过进程id，进程父级id，用户名，EUID，RUID，组名，EGID，RGID，tty进行进程选择。
+---
 
 ## 输出格式控制
 
