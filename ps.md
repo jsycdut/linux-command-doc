@@ -227,7 +227,9 @@ grplist为会话或者有效组名(Effective group name)，注意不是id。
 ```
 * -q pidlist
 ```
-通过pid进行选择（快速模式）。ps仅会读取pidlist里面的pid的必要信息，不会使用附加的过滤规则，pid的顺序是无序的，此选项使用的时候，不允许使用额外的挑选进程的选项，排序也不允许，进程树的列出也不允许，同-q和q选项
+通过pid进行选择（快速模式）。ps仅会读取pidlist里面的pid的必要信息，不会使用附加的过滤规则。
+pid的顺序是无序的，此选项使用的时候，不允许使用额外的挑选进程的选项，排序也不允许，进程树的列出也不允许
+同-q和q选项
 ```
 
 * --quick-pid pidlist
@@ -243,7 +245,8 @@ grplist为会话或者有效组名(Effective group name)，注意不是id。
 ```
 * t ttylist
 ```
-通过tty进行选择，和-t --tty选项类似，但是可以让ttylist置空来代表和ps命令有关的那个tty，使用T选项被认为要比用t在使用空ttylist列表的时候要更纯净些
+通过tty进行选择，和-t --tty选项类似，但是可以让ttylist置空来代表和ps命令有关的那个tty
+使用T选项被认为要比用t在使用空ttylist列表的时候要更纯净些
 ```
 * --tty ttylist
 
@@ -253,13 +256,15 @@ grplist为会话或者有效组名(Effective group name)，注意不是id。
 * U userlist
 
 ```
-通过EUID或者用户名进行选择，EUID和进程有关，当用户的存取文件权限被用于进程存取文件的权限时，进程的EUID就是该用户的id。选项同-u 和 --user
+通过EUID或者用户名进行选择，EUID和进程有关，当用户的存取文件权限被用于进程存取文件的权限时，进程的EUID就是该用户的id。
+选项同-u 和 --user
 The effective user ID describes the user whose file access permissions are used by the process 
 ```
 * -U userlist
 
 ```
-通过RUID或者用户名来进行选择，RUID用于识别创建进程的用户，The real user ID identifies the user who created the process
+通过RUID或者用户名来进行选择，RUID用于识别创建进程的用户
+The real user ID identifies the user who created the process
 ```
 * -u userlist
 ```
