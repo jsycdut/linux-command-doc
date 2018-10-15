@@ -125,44 +125,50 @@ BSD语法：选择系统中所有进程
 有些进程是跑在终端里面的，有些进程是跑在系统里面的。要弄明白自己是想要本终端的进程还是所有终端的，还是系统所有的，要把这个理念搞清楚。
 
 * a 
-
+```
 BSD风格， 解除了BSD风格ps选项的仅挑选和当前用户有关的进程的限制，适用于BSD风格的选项以及ps被限制为BSD风格的时候，说白了就是你的选项里面没有出现“-”符号，也就是你当前使用的是BSD风格的ps。a选项的作用就是选择除了其他指定选项已选择的进程之外的选择，换句话说，就是选择所有和终端有关的进程，或者在和x选项搭配的时候选择出所有的进程。
-
+```
 * -A 
-
+```shell
 Unix风格，选择所有的进程， 作用类同-e选项
-
-* -a Unix风格，选择所有进程，但排除终端无关的进程以及会话领导者(session leader，第一个开启会话的进程，通常为一个shell)
-
+```
+* -a 
+```shell
+Unix风格，选择所有进程，但排除终端无关的进程以及会话领导者(session leader，第一个开启会话的进程，通常为一个shell)
+```
 * -d 
-
+```shell
 Unix风格，选择所有进程，但是排除会话领导者(session leader)
+```
+* -- deselect 
 
-* -- deselect GNU长选项风格，选择除了那些实现某些特定条件的之外的进程（反选进程）， 作用类同与-N
-
+```shell
+GNU长选项风格，选择除了那些实现某些特定条件的之外的进程（反选进程）， 作用类同与-N
+```
 * -e 
-
+```shell
 Unix风格，同-A，选择所有进程
-
+```
 * g 
-
+```shell
 BSD风格，选择所有进程，即使是session leader。此选项已过时且可能在未来的ps中不被支持，并且此选项仅在sunos4特性下才可用（基本可以放弃这个选项）
-
+```
 * -N 
-
+```shell
 Unix风格，反选进程。作用同前面的--deselect
-
+```
 * T 
-
+```shell
 BSD风格，选择与终端有关的所有进程，作用同不带参数的t选项
+```
 * r 
-
+```shell
 BSD风格，只选择在运行中的进程
-
+```
 * x 
-
+```shell
 BSD风格，解除BSD风格ps中的进程必须有对应的tty的限制（ps必须为BSD风格）
-
+```
 ### 常用进程选择
 * 列出本终端的所有进程
 ```shell
@@ -191,73 +197,83 @@ ps -e # -e 可以换成 -A
 123  等同于 --pid 123
 
 * -C cmdlist
-
+```
 cmdlist为进程名参数,选择进程名参数列表指定的进程，进程名为executable name
-
+```
 * -G grplist
-
+```
 grplist为真实组ID列表或者组名称列表,选择相应真实组ID的进程
-
+```
 * -g grplist
 
+```
 grplist为会话或者有效组名(Effective group name)，注意不是id。
-
+```
 * --group grplist
-
+```
 通过有效组ID来进行选择，grplist为EGID或者名称，效果同-G
-
+```
 * p pidlist
-
+```
 通过pid列表进行选择，选项同-p 和 --pid（这俩为Unix风格）
-
+```
 * --ppid pidlist
-
+```
 通过ppid进行选择，选择那些父id是ppid的进程
-
+```
 * q pidlist
-
+```
 通过pid进行选择（快速模式），同-q --quick-pid选项
-
+```
 * -q pidlist
+```
 通过pid进行选择（快速模式）。ps仅会读取pidlist里面的pid的必要信息，不会使用附加的过滤规则，pid的顺序是无序的，此选项使用的时候，不允许使用额外的挑选进程的选项，排序也不允许，进程树的列出也不允许，同-q和q选项
+```
 
 * --quick-pid pidlist
 
+```
 同-q 和 q选项
 
+```
 * -s sesslist
 
+```
 通过session ID进行选择，同-s选项
-
+```
 * t ttylist
-
+```
 通过tty进行选择，和-t --tty选项类似，但是可以让ttylist置空来代表和ps命令有关的那个tty，使用T选项被认为要比用t在使用空ttylist列表的时候要更纯净些
-
+```
 * --tty ttylist
 
+```
 通过terminal进行选择，同-t和t
-
+```
 * U userlist
 
+```
 通过EUID或者用户名进行选择，EUID和进程有关，当用户的存取文件权限被用于进程存取文件的权限时，进程的EUID就是该用户的id。选项同-u 和 --user
 The effective user ID describes the user whose file access permissions are used by the process 
-
+```
 * -U userlist
 
+```
 通过RUID或者用户名来进行选择，RUID用于识别创建进程的用户，The real user ID identifies the user who created the process
-
+```
 * -u userlist
-
+```
 同U 和 --user
-
+```
 * --User userlist
-
+```
 通过RUID或者用户名进行选择，同-u 
-
+```
 * --user userlist
 
+```
 通过EUID或者用户名进行选择，同-u和U选项
-
+```
 ## 常用选择
 
 * 选出指定名称的进程
