@@ -18,9 +18,9 @@ kill命令默认发送的信号是TERM，使用-l或者-L选项可列出所有�
 ```
 向pid列表中的所有进程发送信号
 ```
-* -<signal>
-* -s <signal> 
-* --signal <signal> 
+* -signal
+* -s signal 
+* --signal signal 
 ```
 这三者全是意为发送signal指定的信号，信号可以数字或者名称的形式，signal的含义在signal(7)手册中有讲解。
 ```
