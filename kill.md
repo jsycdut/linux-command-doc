@@ -34,7 +34,7 @@ kill命令默认发送的信号是TERM，使用-l或者-L选项可列出所有�
 用nice表格的形式列出信号名称,(可能支持的不太好)
 ```
 
-**注意，shell里面可能有内置的kill命令，这时候需要以绝对路径使用kill，比如/bin/kill**
+**注意，shell里面可能有内置的kill命令，这时候需要以绝对路径使用kill，比如/bin/kill(我建立别名以使用/bin/kill, alias kill="/bin/kill")**
 
 ## 例子
 
