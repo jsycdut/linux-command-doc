@@ -1,3 +1,4 @@
+![gcc](https://www.itjungle.com/tfh/tfh101415-story01-fig01.png)
 # gcc
 
 ## 名号
