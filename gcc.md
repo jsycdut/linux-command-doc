@@ -1,4 +1,4 @@
-![gcc](https://www.embarcados.com.br/gnu-cross-toolchain-processo-de-build/https:/www.embarcados.com.br/wp-content/uploads/2014/05/imagem-de-destaque-61-696x418.png)
+![gcc picture](https:/www.embarcados.com.br/wp-content/uploads/2014/05/imagem-de-destaque-61-696x418.png)
 # gcc
 
 ## 名号
