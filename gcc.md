@@ -1,10 +1,11 @@
-![gcc](https://www.itjungle.com/tfh/tfh101415-story01-fig01.png)
+![gcc](https://www.itjungle.com/tfh/tfh101415-story01-fig01.pn://www.embarcados.com.br/wp-content/uploads/2014/05/imagem-de-destaque-61.png)
 # gcc
 
 ## 名号
 GCC - GNU C和C++编译器。
 
 ## 概要
+```
 gcc [-c|-S|-E] [-std=standard]
     [-g] [-pg] [-Olevel]
     [-Wwarn...] [-Wpedantic]
@@ -12,7 +13,7 @@ gcc [-c|-S|-E] [-std=standard]
     [-Dmacro[=defn]...] [-Umacro]
     [-foption...] [-mmachine-option...]
     [-o outfile] [@file] infile...
-
+```
 这里仅列出最有用的选项，见以下内容备忘。g++的大多数选项同gcc。
 
 ## 描述
