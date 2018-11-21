@@ -57,7 +57,11 @@ terminal一般指终端，有真终端和伪终端之分，真终端就比如在
 一般书上都讲，权限就是rwx（至于什么421的就不说了），然后分三类，也就是文件所有者，所属组，其他人的读写执行权限，可以用9个二进制位来表示，然而，真相就是文件权限是12位，分别为SGT RWX RWX RWX，后面的RWX三连就是日常说的所有者，所属组，其他人权限。前面的SGT就是set-user-id-bit，set-group-id-bit，sticky-bit，sticky-bit用于控制文件的删除特性，有sticky-bit的文件只能由其所有者删除，set-user-id-bit 和 set-group-id-bit则一般设置在可执行文件身上，设置了这俩的可执行文件，在被非所属主的其他用户执行的时候，该进程的EUID和EGID会变为该可执行文件所属主的id和gid。一般来说，ls -l 显示出来的结果在权限上就9位，是没有12位的，但是又必须得显示，Linux用的办法就是借用x的位置，也就是在可执行权限的那一位做手脚，设置了set-user-bit，若该文件的所有者x位上为x，那么x会被替换为s，若x位上为空，那么该位上将会被赋值为S，set-group-id-bit类同，不过是在文件的所属组的x位上做手脚而，sticky-bit的话，借用的文件的其他人的x位，不过用的不是s，而是t，大小写的规则同前面二者。《Unix环境高级编程》
 
 
-* [ID参考资料](http://brucechen7.github.io/2014/11/14/2014-11-14-euid-ruid-euid/)
+* [EUID SUID RUID参考资料](http://brucechen7.github.io/2014/11/14/2014-11-14-euid-ruid-euid/)
+
+* [用户id-Wikipedia](https://zh.wikipedia.org/wiki/%E7%94%A8%E6%88%B7ID)
+
+在创建文件的时候，文件的访问权限由创建文件的进程的EUID和EGID的决定，访问文件的时候，也根据该进程的EUID和EGID来决定该文件是否有访问权限。
 
 默认情况下， ps会挑选出与当前用户拥有相同的EUID（有效用户ID）以及由相同终端发起的所有进程。ps的显示内容包括，进程ID-PID，进程相关terminal-TTY，累计CPU时间-TIME，执行命令名称-CMD，这些输出条目之间是无序的。
 
